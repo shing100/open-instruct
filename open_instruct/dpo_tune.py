@@ -663,10 +663,10 @@ def main(args: FlatArguments):
     if isinstance(tokenizer, LlamaTokenizer) or isinstance(tokenizer, LlamaTokenizerFast):
         num_added_tokens = tokenizer.add_special_tokens(
             {
-                "bos_token": "<s>",
-                "eos_token": "</s>",
-                "unk_token": "<unk>",
-                "pad_token": "<pad>",
+                "bos_token": "[|system|]",
+                "eos_token": "[|endofturn|]",
+                "unk_token": "[UNK]",
+                "pad_token": "[PAD]",
             }
         )
         assert num_added_tokens in [
@@ -684,16 +684,16 @@ def main(args: FlatArguments):
         else:
             num_added_tokens = tokenizer.add_special_tokens(
                 {
-                    "pad_token": "<pad>",
+                    "pad_token": "[PAD]",
                 }
             )
             assert (
                 num_added_tokens <= 1
             ), "GPTNeoXTokenizer should only add one special token - the pad_token (or no tokens)."
     elif isinstance(tokenizer, GPT2Tokenizer) and isinstance(model, OPTForCausalLM):
-        num_added_tokens = tokenizer.add_special_tokens({"unk_token": "<unk>"})
+        num_added_tokens = tokenizer.add_special_tokens({"unk_token": "[UNK]"})
     elif isinstance(tokenizer, transformers.PreTrainedTokenizerFast) and tokenizer.pad_token is None:
-        num_added_tokens = tokenizer.add_special_tokens({"pad_token": "<pad>"})
+        num_added_tokens = tokenizer.add_special_tokens({"pad_token": "[PAD]"})
         assert num_added_tokens == 1, "We detected no padding token but add_special_tokens did not add one."
 
     # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch

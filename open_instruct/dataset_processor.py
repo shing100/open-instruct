@@ -148,6 +148,14 @@ CHAT_TEMPLATES = {
         "{% endif %}"
         "{% endfor %}"
     ),
+    "exaone": {
+        "{% for message in messages %}"
+        "{% if loop.first and message['role'] != 'system' %}{{ '[|system|][|endofturn|]\n' }}{% endif %}"
+        "{{ '[|' + message['role'] + '|]' + message['content'] }}"
+        "{% if message['role'] == 'user' %}{{ '\n' }}{% else %}{{ '[|endofturn|]\n' }}{% endif %}"
+        "{% endfor %}"
+        "{% if add_generation_prompt %}{{ '[|assistant|]' }}{% endif %}"
+    }
 }
 # flake8: noqa
 
